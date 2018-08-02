@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.ListItemClickListener{
 
-    private static final String SELECTED_RECIPE = "Selected_Recipe";
+    private static final String SELECTED_RECIPE = "Selected_Recipes";
     static String ALL_RECIPES="All_Recipes";
 
     @Override
@@ -24,9 +24,9 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Lis
         selectedRecipeArray.add(clickedItemIndex);
         selectedRecipe.putParcelableArrayList(SELECTED_RECIPE, selectedRecipeArray);
 
-       // final Intent intent = new Intent(this, RecipeDetailActivityDetailActivity.class);
-        //intent.putExtras(selectedRecipe);
-        //startActivity(intent);
+        final Intent intent = new Intent(this, RecipeDetailActivity.class);
+        intent.putExtras(selectedRecipe);
+        startActivity(intent);
 
     }
 }

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Step implements Parcelable {
+
     private Integer id;
     private String shortDescription;
     private String description;
@@ -66,8 +67,12 @@ public class Step implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
-        dest.writeInt(id);
+        if (id == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(id);
+        }
         dest.writeString(shortDescription);
         dest.writeString(description);
         dest.writeString(videoURL);

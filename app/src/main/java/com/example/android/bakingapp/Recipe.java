@@ -10,8 +10,8 @@ public class Recipe implements Parcelable {
 
     private Integer id;
     private String name;
-    private List<Ingredient> ingredients = null;
-    private List<Step> steps = null;
+    private ArrayList<Ingredient> ingredients = null;
+    private ArrayList<Step> steps = null;
     private Integer servings;
     private String image;
 
@@ -31,19 +31,19 @@ public class Recipe implements Parcelable {
         this.name = name;
     }
 
-    public List<Ingredient> getIngredients() {
+    public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
-    public List<Step> getSteps() {
+    public ArrayList<Step> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<Step> steps) {
+    public void setSteps(ArrayList<Step> steps) {
         this.steps = steps;
     }
 
@@ -69,12 +69,10 @@ public class Recipe implements Parcelable {
         name = in.readString();
         ingredients = new ArrayList<>();
         in.readList(ingredients, Ingredient.class.getClassLoader());
-
+        servings = in.readInt();
         steps = new ArrayList<>();
         in.readList(steps, Step.class.getClassLoader());
 
-        servings = in.readInt();
-        image = in.readString();
     }
 
     @Override
@@ -85,10 +83,10 @@ public class Recipe implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
+        dest.writeString(name);
         dest.writeList(ingredients);
-        dest.writeList(steps);
         dest.writeInt(servings);
-        dest.writeString(image);
+        dest.writeList(steps);
     }
 
     @SuppressWarnings("unused")
