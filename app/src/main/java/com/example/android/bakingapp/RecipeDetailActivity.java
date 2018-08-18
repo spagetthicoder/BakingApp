@@ -2,6 +2,7 @@ package com.example.android.bakingapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -9,8 +10,11 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeDetailActivity extends AppCompatActivity implements RecipeDetailAdapter.ListItemClickListener {
+public class RecipeDetailActivity extends AppCompatActivity implements RecipeDetailAdapter.ListItemClickListener, RecipeStepDetailFragment.ListItemClickListener {
 
+    static final String SELECTED_STEPS = "Selected_Steps";
+    static final String SELECTED_INDEX = "Selected_Index";
+    static final String STACK_RECIPE_STEP_DETAIL = "STACK_RECIPE_STEP_DETAIL";
     static String SELECTED_RECIPES = "Selected_Recipes";
     private ArrayList<Recipe> recipe;
     String recipeName;
@@ -74,6 +78,19 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
     @Override
     public void onListItemClick(List<Step> stepsOut, int clickedItemIndex, String recipeName) {
+        RecipeStepDetailFragment fragment = new RecipeStepDetailFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
+        getSupportActionBar().setTitle(recipeName);
+
+        Bundle stepBundle = new Bundle();
+        stepBundle.putParcelableArrayList(SELECTED_STEPS, (ArrayList<Step>) stepsOut);
+        stepBundle.putInt(SELECTED_INDEX, clickedItemIndex);
+        stepBundle.putString("Title", recipeName);
+        fragment.setArguments(stepBundle);
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.recipedetailactivity_detail_container, fragment).addToBackStack(STACK_RECIPE_STEP_DETAIL)
+                    .commit();
     }
 }
