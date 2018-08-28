@@ -2,8 +2,8 @@ package com.example.android.bakingapp;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,7 +40,7 @@ public class RecipeDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         RecyclerView rView;
-        final TextView tView;
+        TextView tView;
 
         recipe = new ArrayList<>();
 
@@ -53,8 +53,8 @@ public class RecipeDetailFragment extends Fragment {
         List<Ingredient> ingredientList = recipe.get(0).getIngredients();
         recipeName = recipe.get(0).getName();
 
-        View rootView = inflater.inflate(R.layout.recipedetailactivity_detail, container, false);
-        tView = (TextView) rootView.findViewById(R.id.recipe_detail_text_view);
+        View rootView = inflater.inflate(R.layout.recipe_detail_fragment_body_part, container, false);
+        tView = (TextView) rootView.findViewById(R.id.recipe_detail_text);
 
         ingredientList.forEach((a) ->
         {
@@ -63,7 +63,7 @@ public class RecipeDetailFragment extends Fragment {
             tView.append("\t\t\t Measure: " + a.getMeasure() + "\n\n");
         });
 
-        rView = (RecyclerView) rootView.findViewById(R.id.recipe_detail_reycler_view);
+        rView = (RecyclerView) rootView.findViewById(R.id.recipe_detail_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rView.setLayoutManager(linearLayoutManager);
 

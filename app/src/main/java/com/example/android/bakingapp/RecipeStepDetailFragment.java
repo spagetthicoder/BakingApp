@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
@@ -50,6 +51,7 @@ public class RecipeStepDetailFragment extends Fragment {
     private Handler mainHandler;
     ArrayList<Recipe> recipe;
     String recipeName;
+    private long position;
 
     public RecipeStepDetailFragment() {
 
@@ -71,11 +73,12 @@ public class RecipeStepDetailFragment extends Fragment {
 
         recipe = new ArrayList<>();
 
+        position = C.TIME_UNSET;
         if (savedInstanceState != null) {
             steps = savedInstanceState.getParcelableArrayList(SELECTED_STEPS);
             selectedIndex = savedInstanceState.getInt(SELECTED_INDEX);
             recipeName = savedInstanceState.getString("Title");
-
+            position = savedInstanceState.getLong("playerPosition", C.TIME_UNSET);
 
         } else {
             steps = getArguments().getParcelableArrayList(SELECTED_STEPS);
@@ -119,7 +122,7 @@ public class RecipeStepDetailFragment extends Fragment {
 
 
             initializePlayer(Uri.parse(steps.get(selectedIndex).getVideoURL()));
-
+            if (position != C.TIME_UNSET) player.seekTo(position);
 
             textView.setVisibility(View.GONE);
 
@@ -172,6 +175,8 @@ public class RecipeStepDetailFragment extends Fragment {
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             player.prepare(mediaSource);
             player.setPlayWhenReady(true);
+            position = player.getCurrentPosition();
+
         }
     }
 
@@ -181,6 +186,7 @@ public class RecipeStepDetailFragment extends Fragment {
         currentState.putParcelableArrayList(SELECTED_STEPS, steps);
         currentState.putInt(SELECTED_INDEX, selectedIndex);
         currentState.putString("Title", recipeName);
+        currentState.putLong("playerPosition", position);
     }
 
     public boolean isInLandscapeMode(Context context) {
