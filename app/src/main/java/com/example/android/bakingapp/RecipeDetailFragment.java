@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.bakingapp.widget.BakingService;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,11 +58,17 @@ public class RecipeDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.recipe_detail_fragment_body_part, container, false);
         tView = (TextView) rootView.findViewById(R.id.recipe_detail_text);
 
+        ArrayList<String> recipeIngredientsWidget = new ArrayList<>();
+
         ingredientList.forEach((a) ->
         {
             tView.append("*  " + a.getIngredient() + "\n");
             tView.append("\t\t\t Quantity: " + a.getQuantity().toString() + "\n");
             tView.append("\t\t\t Measure: " + a.getMeasure() + "\n\n");
+
+            recipeIngredientsWidget.add(a.getIngredient()+"\n"+
+                    "Quantity: "+a.getQuantity().toString()+"\n"+
+                    "Measure: "+a.getMeasure()+"\n");
         });
 
         rView = (RecyclerView) rootView.findViewById(R.id.recipe_detail_recycler);
@@ -70,6 +78,8 @@ public class RecipeDetailFragment extends Fragment {
         RecipeDetailAdapter recipeDetailAdapter = new RecipeDetailAdapter((RecipeDetailActivity)getActivity());
         rView.setAdapter(recipeDetailAdapter);
         recipeDetailAdapter.setMasterRecipeData(recipe, getContext());
+
+        BakingService.startRecipeService(getContext(),recipeIngredientsWidget);
 
         return rootView;
     }
