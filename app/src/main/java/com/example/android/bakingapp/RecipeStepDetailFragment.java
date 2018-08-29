@@ -53,6 +53,8 @@ public class RecipeStepDetailFragment extends Fragment {
     String recipeName;
     private long position;
 
+    Uri videoUri;
+
     public RecipeStepDetailFragment() {
 
     }
@@ -120,9 +122,8 @@ public class RecipeStepDetailFragment extends Fragment {
 
         if (!videoURL.isEmpty()) {
 
-
-            initializePlayer(Uri.parse(steps.get(selectedIndex).getVideoURL()));
-            if (position != C.TIME_UNSET) player.seekTo(position);
+            videoUri = Uri.parse(steps.get(selectedIndex).getVideoURL());
+            initializePlayer(videoUri);
 
             textView.setVisibility(View.GONE);
 
@@ -171,6 +172,8 @@ public class RecipeStepDetailFragment extends Fragment {
             player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
             simpleExoPlayerView.setPlayer(player);
 
+            if (position != C.TIME_UNSET) player.seekTo(position);
+
             String userAgent = Util.getUserAgent(getContext(), "Baking App");
             MediaSource mediaSource = new ExtractorMediaSource(mediaUri, new DefaultDataSourceFactory(getContext(), userAgent), new DefaultExtractorsFactory(), null, null);
             player.prepare(mediaSource);
@@ -194,18 +197,10 @@ public class RecipeStepDetailFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onPause() {
+        super.onPause();
         if (player != null) {
-            player.stop();
-            player.release();
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (player != null) {
+            position = player.getCurrentPosition();
             player.stop();
             player.release();
             player = null;
@@ -213,21 +208,10 @@ public class RecipeStepDetailFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if (player != null) {
-            player.stop();
-            player.release();
+    public void onResume() {
+        super.onResume();
+        if (videoUri != null) {
+            initializePlayer(videoUri);
         }
     }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (player != null) {
-            player.stop();
-            player.release();
-        }
-    }
-
 }

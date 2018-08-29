@@ -38,9 +38,9 @@ public class MainActivityBasicTest {
 
         // Uses {@link Espresso#onData(org.hamcrest.Matcher)} to get a reference to a specific
         // gridview item and clicks it.
-        onData(anything()).inAdapterView(withId(R.id.recipe_recycler)).atPosition(1).perform(click());
+        onData(anything()).inAdapterView(withId(R.id.recipe_recycler)).atPosition(0).perform(click());
 
-        // Checks that the OrderActivity opens with the correct tea name displayed
+        // Checks that the MainActivity opens with the correct recipe name displayed
         onView(withId(R.id.recipe_recycler)).check(matches(withText(CAKE_NAME)));
 
     }
